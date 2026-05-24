@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Room Finder</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            background:url("backgroundImage.png");
+            text-align: center;
+        }
+        .container{
+            background: white;
+            width: 420px;
+            margin: 60px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        h2{
+            color: #8B0000;
+        }
+
+        input, select{
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button{
+            padding: 10px 20px;
+            background: #d97706;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover{
+            background: #8B0000;
+        }
+
+        .card{
+            background: #e3f2fd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            text-align: left;
+            border-left: 5px solid #1976d2;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>🏨 Room Finder</h2>
+
+    <input type="text" id="city" placeholder="Enter city (e.g., Tirupati)">
+    <button onclick="showOptions()">Next</button>
+
+    <div id="options" style="display:none;">
+        
+        <select id="roomType">
+            <option value="">Select Room Type</option>
+            <option value="ac">AC Room</option>
+            <option value="nonac">Non-AC Room</option>
+        </select>
+
+        <select id="budget">
+            <option value="">Select Budget</option>
+            <option value="low">Below ₹1000</option>
+            <option value="medium">₹1000 - ₹3000</option>
+            <option value="high">Above ₹3000</option>
+        </select>
+
+        <button onclick="findRooms()">Search</button>
+    </div>
+
+    <div id="result"></div>
+</div>
+
+<script>
+// Step 1: Reveal the dropdowns
+function showOptions(){
+    let city = document.getElementById("city").value.toLowerCase();
+    if(city.trim() === ""){
+        alert("Please enter a city name first.");
+        return;
+    }
+    document.getElementById("options").style.display = "block";
+}
+
+// Step 2: Fetch data from the specific '/api/rooms' collection route
+async function findRooms(){
+    let cityInput = document.getElementById("city").value.toLowerCase().trim();
+    let typeInput = document.getElementById("roomType").value; 
+    let budgetInput = document.getElementById("budget").value; 
+    let resultDiv = document.getElementById("result");
+
+    resultDiv.innerHTML = "<p>Connecting to database...</p>";
+
+    try {
+        // We use the direct route you created for the 'rooms' collection
+        const response = await fetch(`http://localhost:5000/api/rooms`);
+        const allRooms = await response.json();
+
+        // Filter the database results based on user selection
+        let filteredRooms = allRooms.filter(room => {
+            return (
+                room.location && 
+                room.location.toLowerCase().includes(cityInput) &&
+                room.details &&
+                room.details.type === typeInput &&
+                room.details.budget === budgetInput
+            );
+        });
+
+        resultDiv.innerHTML = ""; // Clear status message
+
+        if (filteredRooms.length === 0) {
+            resultDiv.innerHTML = "<p style='color:red;'>❌ No rooms found matching your criteria in the database.</p>";
+            return;
+        }
+
+        // Generate result cards
+        filteredRooms.forEach(room => {
+            resultDiv.innerHTML += `
+                <div class="card">
+                    <h3>🏨 ${room.name}</h3>
+                    <p><b>📍 Location:</b> ${room.location}</p>
+                    <p><b>❄️ Type:</b> ${room.details.type.toUpperCase()}</p>
+                    <p><b>💰 Budget:</b> ${room.details.budget}</p>
+                    ${room.address ? `<p><b>🏠 Address:</b> ${room.address}</p>` : ''}
+                </div>
+            `;
+        });
+    } catch (error) {
+        console.error("Connection Error:", error);
+        resultDiv.innerHTML = "<p style='color:red;'>⚠️ Connection Error: Is your Node server running on port 5000?</p>";
+    }
+}
+</script>
+</body>
+</html>

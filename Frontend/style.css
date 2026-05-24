@@ -1,0 +1,36 @@
+body {
+    font-family: Arial;
+    background: url("backgroundImage.png");
+    text-align: center;
+}
+
+.login-container, .dashboard {
+    background:gold;
+    padding: 20px;
+    width: 300px;
+    margin: 100px auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px gray;
+}
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    background: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: darkblue;
+}
+
+#error {
+    color: red;
+}

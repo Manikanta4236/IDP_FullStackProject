@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Us</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: url("backgroundImage.png");
+            text-align: center;
+        }
+        .container {
+            background: white;
+            width: 400px;
+            margin: 60px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+        h2 {
+            color: #8B0000;
+        }
+        input, textarea {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-family: Arial;
+        }
+        button {
+            padding: 10px 20px;
+            background: #d97706;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #8B0000;
+        }
+        #responseMessage {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📞 Contact Our Team</h2>
+    
+    <input type="text" id="name" placeholder="Enter your Name" required>
+    <input type="email" id="email" placeholder="Enter your Email" required>
+    <input type="text" id="phone" placeholder="Enter your Phone Number" required>
+    <textarea id="message" rows="4" placeholder="Enter your Query/Message" required></textarea>
+    <br>
+    
+    <button onclick="submitContactForm()">Submit</button>
+
+    <div id="responseMessage"></div>
+</div>
+
+<script>
+async function submitContactForm() {
+    // 1. Get user input values
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const message = document.getElementById("message").value.trim();
+    const responseDiv = document.getElementById("responseMessage");
+
+    // Simple validation check
+    if (!name || !email || !phone || !message) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    responseDiv.style.color = "orange";
+    responseDiv.innerHTML = "Sending your message...";
+
+    // 2. Prepare data object to match your server.js contactSchema
+    const formData = {
+        name: name,
+        email: email,
+        phone: phone,
+        message: message
+    };
+
+    try {
+        // 3. Send a POST request to your existing server.js route
+        const response = await fetch("http://localhost:5000/api/contact", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // 4. Show success message on screen
+            responseDiv.style.color = "green";
+            responseDiv.innerHTML = "Thank you! Our team will reach out to you soon. 😊";
+            
+            // Clear the input fields after successful submission
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("phone").value = "";
+            document.getElementById("message").value = "";
+        } else {
+            responseDiv.style.color = "red";
+            responseDiv.innerHTML = "❌ Error: " + (result.error || "Failed to save message.");
+        }
+    } catch (error) {
+        console.error("Form Submit Error:", error);
+        responseDiv.style.color = "red";
+        responseDiv.innerHTML = "⚠️ Server Error: Is your backend server.js running on port 5000?";
+    }
+}
+</script>
+</body>
+</html>

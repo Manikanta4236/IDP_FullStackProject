@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temple Pilgrimage Planner</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+html{
+    scroll-behavior:smooth;
+}
+nav{
+    position:fixed; 
+    width:100%;
+    top:0;
+    padding:15px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    text-align: center;
+    background:linear-gradient(90deg,#8B0000,#d97706);
+    color:white;
+    z-index:1000;
+}
+nav h2{
+    letter-spacing:1px;
+}
+nav ul{
+    list-style:none;
+    display:flex;
+    gap:25px;
+}
+nav ul li a{
+    text-decoration:none;
+    color:white;
+    font-weight:bold;
+    transition:0.3s;
+}
+nav ul li a:hover{
+    color:gold;
+    transform:scale(1.1);
+}
+.hero{
+    height:100vh;
+    background:url("backgroundImage.png");
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+}
+.hero-content{
+    background:rgba(255,255,255,0.2);
+    backdrop-filter:blur(10px);
+    padding:40px;
+    border-radius:15px;
+    color:white;
+    width:90%;
+    max-width:500px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.3);
+    animation:fadeIn 2s ease-in-out;
+}
+.hero-content h1{
+    font-size:32px;
+    margin-bottom:15px;
+}
+.hero-content p{
+    margin-bottom:20px;
+}
+.hero-content input{
+    padding:10px;
+    width:100%;
+    border:none;
+    border-radius:5px;
+    margin-bottom:15px;
+}
+.hero-content button{
+    padding:10px;
+    width: 60px;
+    border:none;
+    border-radius:5px;
+    background:#d97706;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+.hero-content button:hover{
+    background:#8B0000;
+}
+.about{
+    padding:80px 20px;
+    text-align:center;
+}
+.about h2{
+    margin-bottom:20px;
+    color:#8B0000;
+}
+footer{
+    background:tomato;
+    color:white;
+    text-align:center;
+    padding:8px;
+}
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(-20px);}
+    to{opacity:1; transform:translateY(0);}
+}
+@media(max-width:768px){
+    nav{
+        flex-direction:column;
+        gap:10px;
+    }
+}
+</style>
+</head>
+<body>
+<nav>
+    <h2>🕉 Welcome to the Temple Pligrimage Planner</h2>
+</nav>
+<section class="hero">
+    <div  class="hero-content">
+        <h3>Create an account to make your trip memorable</h3>
+        <form>
+        <label for="email">Enter your email</label>
+        <br>
+        <input id="email" type="text" required>
+        <br>
+        <label for="password">Password</label>
+        <br>
+        <input id="password" type="password">
+        <br>
+        <br>
+        <button type="button" onclick="login()">Submit</button>
+        <button type="reset">Reset</button>
+     </form>
+     <a href="login.html">Already have an account</a>
+     </div>
+</section>
+
+<script src="script.js"></script>
+
+<footer>
+    © 2026 Temple Pilgrimage Planner | Designed for Spiritual Journey
+</footer>
+</body>
+</html>

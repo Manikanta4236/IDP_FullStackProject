@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temple Pilgrimage Planner</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #ffecd2, #fcb69f);
+    text-align: center;
+    padding: 40px;
+}
+
+.container{
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+h1{
+    color: #d35400;
+}
+
+input{
+    padding: 10px;
+    width: 80%;
+    margin: 10px 0;
+}
+
+button{
+    padding: 10px 15px;
+    background: #e67e22;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover{
+    background: #ca6f1e;
+}
+
+ul{
+    list-style: none;
+    padding: 0;
+}
+li{
+    background: #f4f4f4;
+    margin: 5px;
+    padding: 8px;
+    border-radius: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1 id="title">Temple Pilgrimage Planner</h1>
+
+    <input type="text" id="nameInput" placeholder="Enter your name">
+    <button id="greetBtn">Greet Me</button>
+
+    <h3 id="welcomeMsg"></h3>
+
+    <hr>
+
+    <h2>Temple List</h2>
+    <button id="showTemples">Show Temples</button>
+    <ul id="templeList"></ul>
+</div>
+
+<script>
+let appName = "Temple Pilgrimage Planner";
+const country = "India";
+
+const templeInfo = {
+    name: "Tirupati",
+    location: "Andhra Pradesh",
+    deity: "Lord Venkateswara"
+};
+
+// Array
+let temples = [
+    "Tirupati",
+    "Srisailam",
+    "Bhadrachalam",
+    "Kedarnath",
+    "Sabarimala",
+    "Shiridi",
+    "Kedaranath",
+    "Bhadrinath",
+    "Annavaram",
+    "Rameswaram",
+    "Ayodhya",
+    "kasi"
+];
+
+// Function
+const greetUser = (name) => {
+    return `Welcome to ${appName}, ${name}!`;
+};
+
+// DOM Manipulation & Event Handling
+
+const greetBtn = document.getElementById("greetBtn");
+const showBtn = document.getElementById("showTemples");
+const welcomeMsg = document.getElementById("welcomeMsg");
+const templeList = document.getElementById("templeList");
+
+// Greet Button Event
+greetBtn.addEventListener("click", () => {
+    let name = document.getElementById("nameInput").value;
+
+    if(name.trim() === ""){
+        welcomeMsg.textContent = "Please enter your name!";
+        welcomeMsg.style.color = "red";
+    } else {
+        welcomeMsg.textContent = greetUser(name);
+        welcomeMsg.style.color = "green";
+    }
+});
+
+// Show Temples Event
+showBtn.addEventListener("click", () => {
+
+    // Clear previous list
+    templeList.innerHTML = "";
+
+    // Loop through array and dynamically create list
+    temples.forEach((temple) => {
+        const li = document.createElement("li");
+        li.textContent = temple;
+        templeList.appendChild(li);
+    });
+
+});
+
+// Dynamic Update Example (Changing Title using Object)
+document.getElementById("title").addEventListener("mouseover", () => {
+    document.getElementById("title").textContent =
+        `${templeInfo.name} - ${templeInfo.location}`;
+});
+
+document.getElementById("title").addEventListener("mouseout", () => {
+    document.getElementById("title").textContent = appName;
+});
+
+</script>
+</body>
+</html>

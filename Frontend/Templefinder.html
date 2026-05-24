@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Temple Finder</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            background: url("backgroundImage.png");
+            text-align: center;
+        }
+
+        .container{
+            background: white;
+            width: 400px;
+            margin: 80px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+        h2{
+            color: #8B0000;
+        }
+
+        input{
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button{
+            padding: 10px 20px;
+            background: #d97706;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover{
+            background: #8B0000;
+        }
+
+        .result{
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .card{
+            background: #fff3e0;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>🛕 Temple Finder</h2>
+
+    <input type="text" id="location" placeholder="Enter city (e.g., Tirupati)">
+    <br>
+    <button onclick="findTemples()">Search</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+// Function to Fetch from MongoDB
+async function findTemples() {
+    let input = document.getElementById("location").value.toLowerCase().trim();
+    let resultDiv = document.getElementById("result");
+
+    resultDiv.innerHTML = "<p>Searching database...</p>";
+
+    if(input === ""){
+        resultDiv.innerHTML = "<p>Please enter a location.</p>";
+        return;
+    }
+
+    try {
+        // 1. Fetch data from your server.js route
+        const response = await fetch(`http://localhost:5000/api/nearby?type=temple`);
+        const allTemples = await response.json();
+
+        // 2. Filter the results based on the city you typed
+        let filteredTemples = allTemples.filter(temple => 
+            temple.location && temple.location.toLowerCase().includes(input)
+        );
+
+        resultDiv.innerHTML = ""; // Clear loading message
+
+        if (filteredTemples.length === 0) {
+            resultDiv.innerHTML = "<p style='color:red;'>❌ No temples found in the database for this location.</p>";
+            return;
+        }
+
+        // 3. Display the results from MongoDB
+        filteredTemples.forEach(temple => {
+            resultDiv.innerHTML += `
+                <div class="card">
+                    <h3>🛕 ${temple.name}</h3>
+                    <p><b>📍 Location:</b> ${temple.location}</p>
+                    <p><b>⏰ Timings:</b> ${temple.details ? temple.details.timings : 'Check website'}</p>
+                    <p><b>✨ Deity:</b> ${temple.details ? temple.details.deity : 'N/A'}</p>
+                </div>
+            `;
+        });
+    } catch (error) {
+        console.error("Error:", error);
+        resultDiv.innerHTML = "<p style='color:red;'>⚠️ Connection Error: Is your node server.js running?</p>";
+    }
+}
+</script>
+
+</body>
+</html>

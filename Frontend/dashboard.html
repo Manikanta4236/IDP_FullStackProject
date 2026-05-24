@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            text-align: center;
+            background:url("backgroundImage.png");
+        }
+
+        .container{
+            background: white;
+            padding: 20px;
+            width: 300px;
+            margin: 100px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        ul{
+            list-style: none;
+            padding: 0;
+        }
+
+        li{
+            margin: 10px 0;
+        }
+
+        a{
+            text-decoration: none;
+            color: blue;
+            font-weight: bold;
+        }
+
+        button{
+            margin-top: 15px;
+            padding: 10px;
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .about {
+            background-color: cadetblue;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: medium;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2 id="welcome"></h2>
+
+    <h3>Features</h3>
+    <ul>
+        <li><a href="Templefinder.html">🛕 Temple Finder</a></li>
+        <li><a href="Roomfinder.html">🏨 Room Finder</a></li>
+        <li><a href="HotelFinder.html">🏨 Restaurants Finder</a></li>
+        <li><a href="contact.html">📞 Contact Us</a></li>
+    </ul>
+
+    <button onclick="logout()">Logout</button>
+</div>
+<div class="about">
+<p><strong>About Us</strong></p>
+<p>
+Welcome to <b>Temple Pilgrimage Planner</b> — your trusted companion for a peaceful and well-organized spiritual journey. 
+Our mission is to help devotees and travelers make their pilgrimage not just a trip, but a truly memorable and meaningful experience.
+</p>
+<p>
+We understand that visiting temples is more than just travel — it is about faith, devotion, and inner peace. 
+That’s why our platform is designed to simplify every aspect of your journey. From discovering famous temples to finding nearby accommodations and essential travel information, we bring everything together in one place.
+</p>
+<p>
+With our easy-to-use features like <b>Temple Finder</b>, <b>Room Finder</b>, and <b>Location Finder</b>, users can quickly plan their trips without confusion or stress. 
+Whether you are visiting a well-known pilgrimage site or exploring hidden spiritual destinations, we aim to guide you every step of the way.
+</p>
+<p>
+Our goal is to save your time, reduce your effort, and enhance your travel experience so that you can focus on what truly matters — your spiritual connection and happiness.
+</p>
+<p>
+🌿 <b>Temple Pilgrimage Planner</b> — Making every journey divine, comfortable, and unforgettable.
+</p>
+</div>
+<script>
+let user = sessionStorage.getItem("username");
+
+if(user){
+    document.getElementById("welcome").innerText = "Welcome, " + user + " 👋";
+}else{
+    window.location.href = "index1.html";
+}
+
+function logout(){
+    sessionStorage.clear();
+    window.location.href = "index1.html"; 
+}
+</script>
+
+</body>
+</html>

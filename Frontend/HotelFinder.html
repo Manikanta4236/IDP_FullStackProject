@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Restaurant Finder</title>
+    <style>
+        body{ font-family: Arial; background: url("backgroundImage.png"); text-align: center; }
+        .container{ background: white; width: 420px; margin: 60px auto; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px gray; }
+        h2{ color: #8B0000; }
+        input, select{ width: 90%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
+        button{ padding: 10px 20px; background: #d97706; color: white; border: none; cursor: pointer; border-radius: 5px; }
+        button:hover{ background: #8B0000; }
+        .card{ background: #fff3e0; padding: 15px; margin: 15px 0; border-radius: 8px; text-align: left; border-left: 5px solid #d97706; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🍽️ Restaurant Finder</h2>
+
+    <input type="text" id="city" placeholder="Enter city (e.g., Vijayawada)">
+    <button onclick="checkRegion()">Next</button>
+
+    <div id="foodTypeSection" style="display:none;">
+        <h3 id="regionMsg"></h3>
+        <select id="foodType">
+            <option value="">Select Food Type</option>
+            <option value="meals">Full Meals</option>
+            <option value="fastfood">Fast Food / Snacks</option>
+        </select>
+        <select id="vegType">
+            <option value="">Veg / Non-Veg</option>
+            <option value="veg">Pure Veg</option>
+            <option value="nonveg">Non-Veg</option>
+        </select>
+        <button onclick="findRestaurants()">Search</button>
+    </div>
+
+    <div id="result"></div>
+</div>
+
+<script>
+const southCities = ["vijayawada","tirupati","chennai","hyderabad","bangalore","repalle"];
+
+function checkRegion(){
+    let city = document.getElementById("city").value.toLowerCase().trim();
+    if(city === ""){ alert("Please enter city"); return; }
+
+    let msg = document.getElementById("regionMsg");
+    if(southCities.includes(city)){
+        msg.innerHTML = "🌴 South Indian Region — Try Dosa or Full Meals!";
+    } else {
+        msg.innerHTML = "🌍 Explore Local Flavors!";
+    }
+    document.getElementById("foodTypeSection").style.display = "block";
+}
+
+async function findRestaurants(){
+    let cityInput = document.getElementById("city").value.toLowerCase().trim();
+    let typeInput = document.getElementById("foodType").value;
+    let vegInput = document.getElementById("vegType").value;
+    let resultDiv = document.getElementById("result");
+
+    resultDiv.innerHTML = "<p>Finding best food for you...</p>";
+
+    try {
+        const response = await fetch(`http://localhost:5000/api/restaurants`);
+        const allData = await response.json();
+
+        let filtered = allData.filter(res => 
+            res.location.toLowerCase().includes(cityInput) &&
+            res.details.type === typeInput &&
+            res.details.category === vegInput
+        );
+
+        resultDiv.innerHTML = "";
+
+        if (filtered.length === 0) {
+            resultDiv.innerHTML = "<p style='color:red;'>❌ No restaurants found for this selection.</p>";
+            return;
+        }
+
+        filtered.forEach(res => {
+            resultDiv.innerHTML += `
+                <div class="card">
+                    <h3>🍴 ${res.name}</h3>
+                    <p><b>📍 Location:</b> ${res.location}</p>
+                    <p><b>🍲 Style:</b> ${res.details.type}</p>
+                    <p><b>🥬 Category:</b> ${res.details.category.toUpperCase()}</p>
+                </div>
+            `;
+        });
+    } catch (error) {
+        resultDiv.innerHTML = "<p style='color:red;'>⚠️ Server Error: Is your backend running?</p>";
+    }
+}
+</script>
+</body>
+</html>
